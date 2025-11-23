@@ -461,19 +461,11 @@
     }
 
     tbody tr {
-      cursor: pointer;
       transition: all 0.2s ease;
     }
 
     tbody tr:hover {
-      background: #b2dfdb;
-      transform: scale(1.01);
-      box-shadow: 0 2px 8px rgba(0, 121, 107, 0.2);
-    }
-
-    tbody tr:active {
-      background: #80cbc4;
-      transform: scale(0.99);
+      background: #e0f2f1;
     }
 
     tbody tr:last-child td {
@@ -583,6 +575,35 @@
       margin: 0;
       font-size: 1.5rem;
       font-weight: 700;
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+    }
+
+    .generate-report-btn {
+      background: white;
+      color: #004d40;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .generate-report-btn:hover {
+      background: #e0f2f1;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .close {
@@ -887,6 +908,17 @@
         font-size: 1.25rem;
       }
 
+      .modal-header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .generate-report-btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+      }
+
       .modal-body {
         padding: 1rem;
       }
@@ -1134,7 +1166,9 @@
   <div id="detailsModal" class="modal">
    <div class="modal-content">
     <div class="modal-header">
-     <h2 id="modalTitle">Record Details</h2><button class="close" onclick="closeModal()">×</button>
+     <div class="modal-header-left">
+      <h2 id="modalTitle">Record Details</h2><button class="generate-report-btn" onclick="generateReportFromModal()"> 📋 Generate Spot Report </button>
+     </div><button class="close" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
    </div>
@@ -1452,7 +1486,10 @@
       }, 250);
     }
 
+    let currentModalData = null;
+
     function openModal(rowData) {
+      currentModalData = rowData;
       const modalBody = document.getElementById('modalBody');
       
       let detailsHtml = '';
@@ -1504,6 +1541,13 @@
       document.body.style.overflow = 'auto';
     }
 
+    function generateReportFromModal() {
+      if (currentModalData) {
+        closeModal();
+        openReportModal(currentModalData);
+      }
+    }
+
     window.openModalFromData = function(rowData) {
       openModal(rowData);
     };
@@ -1515,6 +1559,7 @@
     };
 
     window.closeModal = closeModal;
+    window.generateReportFromModal = generateReportFromModal;
 
     function renderTable(data, page = 1) {
       const headerRow = document.getElementById('headerRow');
@@ -1537,8 +1582,7 @@
       const pageData = data.slice(startIdx, endIdx);
 
       bodyRows.innerHTML = pageData.map((row, idx) => {
-        const rowData = JSON.stringify(row).replace(/"/g, '&quot;');
-        return '<tr onclick="openReportModal(' + rowData + ')">' + 
+        return '<tr>' + 
           keys.map(key => {
             let value = row[key] || '';
             
@@ -2079,5 +2123,5 @@ Report Generated: ${new Date().toLocaleString('en-US', {
 
     loadData();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a2f09d537a6fee1',t:'MTc2Mzg4MzgzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a2f257b85f9fee1',t:'MTc2Mzg4NDk2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
